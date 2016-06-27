@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE generatorConfiguration
+        PUBLIC "-//mybatis.org//DTD MyBatis Generator Configuration 1.0//EN"
+        "http://mybatis.org/dtd/mybatis-generator-config_1_0.dtd">
+
+<generatorConfiguration>
+
+    <context id="Bailingdai" targetRuntime="MyBatis3">
+        <plugin type="bob.mybatis.plugins.SimpleSplitTablePlugin"></plugin>
+        <plugin type="org.mybatis.generator.plugins.ToStringPlugin"/>
+        <plugin type="org.mybatis.generator.plugins.SerializablePlugin"/>
+        <plugin type="org.mybatis.generator.plugins.RowBoundsPlugin"/>
+        <!--plugin是有序的，一个返回false就会阻止下面的调用，因为是break模式 -->
+
+        <commentGenerator>
+            <!--false打开注释，true关闭注释，跟下面相反，有点反人类-->
+            <property name="suppressAllComments" value="true"/>
+            <!-- 是否生成注释代时间戳，false为打开时间标志，true关闭 -->
+            <property name="suppressDate" value="true"/>
+            <property name="targetProject" value=""/>
+        </commentGenerator>
+
+        <!-- 数据库配置 -->
+        <jdbcConnection driverClass="com.mysql.jdbc.Driver"
+                        connectionURL="jdbc:mysql://192.168.2.223:3306/bailingdai"
+                        userId="root"
+                        password="zufangbao">
+        </jdbcConnection>
+
+        <!--用来处理NUMBERIC跟DECIMAL类的策略-->
+        <javaTypeResolver>
+            <property name="forceBigDecimals" value="false"/>
+        </javaTypeResolver>
+
+        <!-- model配置 -->
+        <javaModelGenerator targetPackage="package.name"
+                            targetProject="file.path">
+            <property name="enableSubPackages" value="true"/>
+            <property name="trimStrings" value="true"/>
+        </javaModelGenerator>
+
+        <!-- xml配置文件,只有javaClientGenerator是XMLMAPPER的时候是必须的 -->
+        <sqlMapGenerator targetPackage="sqlmap-bbbb"
+                         targetProject="file.path">
+            <property name="enableSubPackages" value="true"/>
+        </sqlMapGenerator>
+
+        <!--mapper类/ANNOTATEDMAPPER/XMLMAPPER -->
+        <javaClientGenerator type="XMLMAPPER"
+                             targetPackage="package.name"
+                             targetProject="file.path">
+            <property name="enableSubPackages" value="true"/>
+        </javaClientGenerator>
+
+        <table tableName="T_Fld_Config" domainObjectName="FldConfig"
+               enableDeleteByPrimaryKey="false"
+               enableSelectByPrimaryKey="false">
+            <property name="useActualColumnNames" value="true"/>
+            <generatedKey column="MainKeyName" sqlStatement="JDBC" identity="false"/>
+            <!--忽略掉***这列-->
+            <ignoreColumn column="***"/>
+        </table>
+
+    </context>
+
+</generatorConfiguration>
