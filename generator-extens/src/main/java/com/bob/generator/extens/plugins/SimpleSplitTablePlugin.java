@@ -14,7 +14,7 @@ public class SimpleSplitTablePlugin extends PluginAdapterEnhancement {
     /**
      * 用于从模型中读取属性值，模型/辅助类中都会有此tableName属性
      */
-    private final String tableName = "${tableName}";
+    private final String tableName = " ${tableName} ";
 
     /**
      * 用于保留原始表名，做为生成的模型类跟Example类中tableName属性的默认值
@@ -29,6 +29,17 @@ public class SimpleSplitTablePlugin extends PluginAdapterEnhancement {
     @Override
     public void initialized(IntrospectedTable introspectedTable) {
         original_tableName = introspectedTable.getFullyQualifiedTableNameAtRuntime();
+
+        /*//将blob对象统一当成字符串处理
+        if (introspectedTable.hasBLOBColumns()) {
+            List<IntrospectedColumn> blobColumns = introspectedTable.getBLOBColumns();
+            for (IntrospectedColumn column : blobColumns) {
+                column.setJdbcTypeName("String");
+                column.setFullyQualifiedJavaType(PrimitiveTypeWrapper.getStringInstance());
+                introspectedTable.getBaseColumns().add(column);
+            }
+            blobColumns.clear();
+        }*/
 
         introspectedTable.getTableConfiguration().setTableName(tableName);
         introspectedTable.setSqlMapFullyQualifiedRuntimeTableName(tableName);

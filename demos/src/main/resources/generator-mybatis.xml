@@ -5,14 +5,12 @@
 
 <generatorConfiguration>
 
-    <context id="Bailingdai" targetRuntime="MyBatis3">
-        <plugin type="bob.mybatis.plugins.SimpleSplitTablePlugin"></plugin>
+    <context id="bbtotal" targetRuntime="MyBatis3">
+        <plugin type="com.bob.generator.extens.plugins.SimpleSplitTablePlugin"></plugin>
         <plugin type="org.mybatis.generator.plugins.ToStringPlugin"/>
-        <plugin type="org.mybatis.generator.plugins.SerializablePlugin"/>
         <plugin type="org.mybatis.generator.plugins.RowBoundsPlugin"/>
-        <!--plugin是有序的，一个返回false就会阻止下面的调用，因为是break模式 -->
 
-        <commentGenerator>
+        <commentGenerator type="com.bob.generator.extens.DDefaultCommentGenerator">
             <!--false打开注释，true关闭注释，跟下面相反，有点反人类-->
             <property name="suppressAllComments" value="true"/>
             <!-- 是否生成注释代时间戳，false为打开时间标志，true关闭 -->
@@ -22,9 +20,9 @@
 
         <!-- 数据库配置 -->
         <jdbcConnection driverClass="com.mysql.jdbc.Driver"
-                        connectionURL="jdbc:mysql://192.168.2.223:3306/bailingdai"
+                        connectionURL="jdbc:mysql://127.0.0.1:3306/bbtotal"
                         userId="root"
-                        password="zufangbao">
+                        password="root">
         </jdbcConnection>
 
         <!--用来处理NUMBERIC跟DECIMAL类的策略-->
@@ -33,31 +31,31 @@
         </javaTypeResolver>
 
         <!-- model配置 -->
-        <javaModelGenerator targetPackage="package.name"
-                            targetProject="file.path">
+        <javaModelGenerator targetPackage="com.bob.mybatis.demos.bbtotal.entity"
+                            targetProject="/Users/bob/Works/code/github/mybatis-extens/demos/src/main/java">
             <property name="enableSubPackages" value="true"/>
             <property name="trimStrings" value="true"/>
         </javaModelGenerator>
 
         <!-- xml配置文件,只有javaClientGenerator是XMLMAPPER的时候是必须的 -->
-        <sqlMapGenerator targetPackage="sqlmap-bbbb"
-                         targetProject="file.path">
+        <sqlMapGenerator targetPackage="com/bob/mybatis/demos/bbtotal/mapper"
+                         targetProject="/Users/bob/Works/code/github/mybatis-extens/demos/src/main/resources">
             <property name="enableSubPackages" value="true"/>
         </sqlMapGenerator>
 
         <!--mapper类/ANNOTATEDMAPPER/XMLMAPPER -->
-        <javaClientGenerator type="XMLMAPPER"
-                             targetPackage="package.name"
-                             targetProject="file.path">
+        <javaClientGenerator type="ANNOTATEDMAPPER"
+                             targetPackage="com.bob.mybatis.demos.bbtotal.mapper"
+                             targetProject="/Users/bob/Works/code/github/mybatis-extens/demos/src/main/java">
             <property name="enableSubPackages" value="true"/>
         </javaClientGenerator>
 
         <!--如果需要分表，请设置enableDeleteByPrimaryKey，enableSelectByPrimaryKey为false，因为此时只有一个主键值做为入参-->
-        <table tableName="T_Fld_Config" domainObjectName="FldConfig"
+        <table tableName="mybatis_bb_00" domainObjectName="Mybatisbb"
                enableDeleteByPrimaryKey="false"
                enableSelectByPrimaryKey="false">
             <property name="useActualColumnNames" value="true"/>
-            <generatedKey column="MainKeyName" sqlStatement="JDBC" identity="false"/>
+            <generatedKey column="autoId" sqlStatement="JDBC" identity="true"/>
             <!--忽略掉***这列-->
             <ignoreColumn column="***"/>
         </table>
