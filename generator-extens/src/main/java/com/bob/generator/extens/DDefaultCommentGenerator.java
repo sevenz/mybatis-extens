@@ -32,7 +32,7 @@ public class DDefaultCommentGenerator extends DefaultCommentGenerator {
         final String remark = introspectedColumn.getRemarks();
         if (remark != null && !"".equals(remark)) {
             field.addJavaDocLine("/**");
-            field.addJavaDocLine(remark);
+            field.addJavaDocLine(" * " + remark);
             field.addJavaDocLine(" */");
         }
     }
