@@ -14,12 +14,12 @@ import java.util.Date;
  */
 public class DDefaultCommentGenerator extends DefaultCommentGenerator {
 
-    SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+    SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 
     @Override
     public void addJavaFileComment(CompilationUnit compilationUnit) {
 
-        compilationUnit.addFileCommentLine("/*");
+        compilationUnit.addFileCommentLine("/**");
         compilationUnit.addFileCommentLine(" * " + compilationUnit.getType().getShortName() + ".java");
         compilationUnit.addFileCommentLine(" * Copyright(C) com.bob.*** Company");
         compilationUnit.addFileCommentLine(" * All rights reserved.");
@@ -31,7 +31,9 @@ public class DDefaultCommentGenerator extends DefaultCommentGenerator {
     public void addFieldComment(Field field, IntrospectedTable introspectedTable, IntrospectedColumn introspectedColumn) {
         final String remark = introspectedColumn.getRemarks();
         if (remark != null && !"".equals(remark)) {
-            field.addJavaDocLine("/** " + remark + " */");
+            field.addJavaDocLine("/**");
+            field.addJavaDocLine(remark);
+            field.addJavaDocLine(" */");
         }
     }
 }
