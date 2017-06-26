@@ -139,7 +139,7 @@ public class MySqlLimitPlugin extends PluginAdapterEnhancement {
 
         bodyLines.add("// add pagination for mysql with limit clause ");
         bodyLines.add("StringBuilder sqlBuilder = new StringBuilder(sql.toString());");
-        bodyLines.add("if( example != null && example.getPagesize() != null ) { ");
+        bodyLines.add("if( example != null && example.getPageSize() != null ) { ");
         bodyLines.add("     sqlBuilder.append(\" limit \");");
         bodyLines.add("     if( example.getOffset() != null ) { ");
         bodyLines.add("         sqlBuilder.append(example.getOffset()).append(\",\").append(example.getPageSize());");
