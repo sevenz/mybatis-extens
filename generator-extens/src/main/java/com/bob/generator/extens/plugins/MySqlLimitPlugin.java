@@ -38,7 +38,7 @@ public class MySqlLimitPlugin extends PluginAdapterEnhancement {
         method.setVisibility(JavaVisibility.PUBLIC);
         method.setName(generateSetMethodName(fieldName));
         method.addParameter(new Parameter(field.getType(), fieldName));
-        sb.append("assert " + fieldName + " >= 0 : \"" +  fieldName + " should be bigger than zero\";");
+        sb.append("assert " + fieldName + " >= 0 : \"" + fieldName + " should be bigger than zero\";");
         sb.append(" this." + fieldName + "=" + fieldName + ";");
         method.addBodyLine(sb.toString());
         commentGenerator.addGeneralMethodComment(method, introspectedTable);
@@ -97,6 +97,13 @@ public class MySqlLimitPlugin extends PluginAdapterEnhancement {
         return super.modelExampleClassGenerated(topLevelClass, introspectedTable);
     }
 
+    /**
+     * XML生成SQL时使用
+     *
+     * @param element
+     * @param introspectedTable
+     * @return
+     */
     @Override
     public boolean sqlMapSelectByExampleWithoutBLOBsElementGenerated(XmlElement element, IntrospectedTable introspectedTable) {
         XmlElement ifLimitNotNullElement = new XmlElement("if");
@@ -116,6 +123,14 @@ public class MySqlLimitPlugin extends PluginAdapterEnhancement {
         return super.sqlMapSelectByExampleWithoutBLOBsElementGenerated(element, introspectedTable);
     }
 
+    /**
+     * 注解生成SQL时使用
+     *
+     * @param method
+     * @param topLevelClass
+     * @param introspectedTable
+     * @return
+     */
     @Override
     public boolean providerSelectByExampleWithoutBLOBsMethodGenerated(Method method, TopLevelClass topLevelClass, IntrospectedTable introspectedTable) {
         List<String> bodyLines = method.getBodyLines();
@@ -125,12 +140,12 @@ public class MySqlLimitPlugin extends PluginAdapterEnhancement {
         bodyLines.add("// add pagination for mysql with limit clause ");
         bodyLines.add("StringBuilder sqlBuilder = new StringBuilder(sql.toString());");
         bodyLines.add("if( example != null && example.getPagesize() != null ) { ");
-        bodyLines.add("    sqlBuilder.append(\" limit \");");
-        bodyLines.add("    if( example.getOffset() != null ) { ");
-        bodyLines.add("        sqlBuilder.append(example.getOffset()).append(\",\").append(example.getPageSize());");
-        bodyLines.add("    } else {");
-        bodyLines.add("        sqlBuilder.append(example.getPageSize()); ");
-        bodyLines.add("    }");
+        bodyLines.add("     sqlBuilder.append(\" limit \");");
+        bodyLines.add("     if( example.getOffset() != null ) { ");
+        bodyLines.add("         sqlBuilder.append(example.getOffset()).append(\",\").append(example.getPageSize());");
+        bodyLines.add("     } else {");
+        bodyLines.add("         sqlBuilder.append(example.getPageSize()); ");
+        bodyLines.add("     }");
         bodyLines.add("}");
         bodyLines.add("return sqlBuilder.toString();");
 
