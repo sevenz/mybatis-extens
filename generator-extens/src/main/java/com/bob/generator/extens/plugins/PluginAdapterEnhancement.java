@@ -4,6 +4,7 @@ import org.mybatis.generator.api.CommentGenerator;
 import org.mybatis.generator.api.IntrospectedTable;
 import org.mybatis.generator.api.PluginAdapter;
 import org.mybatis.generator.api.dom.java.*;
+import org.mybatis.generator.config.Context;
 import org.mybatis.generator.logging.JdkLoggingImpl;
 import org.mybatis.generator.logging.Log;
 
@@ -17,6 +18,11 @@ public abstract class PluginAdapterEnhancement extends PluginAdapter {
     protected Log logger = new JdkLoggingImpl(this.getClass());
 
     /**
+     * 注释工具
+     */
+    protected CommentGenerator commentGenerator;
+
+    /**
      * 取消验证
      *
      * @param list
@@ -25,6 +31,12 @@ public abstract class PluginAdapterEnhancement extends PluginAdapter {
     @Override
     public boolean validate(List<String> list) {
         return true;
+    }
+
+    @Override
+    public void setContext(Context context) {
+        super.setContext(context);
+        commentGenerator = context.getCommentGenerator();
     }
 
     /**
@@ -79,5 +91,4 @@ public abstract class PluginAdapterEnhancement extends PluginAdapter {
         commentGenerator.addGeneralMethodComment(method, introspectedTable);
         topLevelClass.addMethod(method);
     }
-
 }
