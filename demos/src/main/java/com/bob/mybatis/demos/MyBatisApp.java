@@ -9,7 +9,6 @@ import org.springframework.context.support.ClassPathXmlApplicationContext;
 
 public class MyBatisApp {
 
-
     public static void main(String[] args) {
 
         MyBatisApp myBatisApp = new MyBatisApp();
