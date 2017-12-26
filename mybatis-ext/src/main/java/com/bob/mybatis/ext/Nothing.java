@@ -1,5 +1,6 @@
 package com.bob.mybatis.ext;
 
+@SuppressWarnings("unused")
 public class Nothing {
 
     /**
@@ -11,6 +12,11 @@ public class Nothing {
      */
 
     /**
-     * 如果采用java code的方式配置，同时采用非注解即xml形式的sql，此时mappper类跟mapper.xml要么在一个文件夹下，如果不是，那么需要他们包空间一样
+     * 如果采用java code的方式配置，同时采用非注解即xml形式的sql，此时mappper类跟mapper.xml要么在一个文件夹下，
+     * 如果不是，那么需要他们包空间一样
+     */
+
+    /**
+     * MapperFactoryBean 用来产生 ***mapper的类
      */
 }

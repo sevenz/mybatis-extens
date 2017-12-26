@@ -52,7 +52,6 @@ public class MySqlLimitPlugin extends PluginAdapterEnhancement {
         commentGenerator.addGeneralMethodComment(method, introspectedTable);
         topLevelClass.addMethod(method);
 
-
         field = new Field();
         field.setName("pageNo");
         field.setVisibility(JavaVisibility.PRIVATE);
@@ -151,6 +150,4 @@ public class MySqlLimitPlugin extends PluginAdapterEnhancement {
 
         return super.providerSelectByExampleWithoutBLOBsMethodGenerated(method, topLevelClass, introspectedTable);
     }
-
-
 }

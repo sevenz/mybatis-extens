@@ -6,7 +6,9 @@ public class MapperGerneratorApp {
 
     public static void main(String[] args) {
 
-        String path = System.class.getResource("/generator-mybatis.xml").getPath();
+        String fileName = "/generator-mybatis-localhotel.xml";
+        System.out.println(fileName);
+        String path = System.class.getResource(fileName).getPath();
         System.out.println(path);
         String[] args2 = {"-configfile", path, "-overwrite", "-verbose"};
         ShellRunner.main(args2);

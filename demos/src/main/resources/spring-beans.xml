@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.2.xsd">
+
+    <bean id="dataSource" class="com.zaxxer.hikari.HikariDataSource" destroy-method="close">
+        <property name="jdbcUrl" value="jdbc:mysql://127.0.0.1:3306/hotel?allowMultiQueries=true" />
+        <property name="username" value="root" />
+        <property name="password" value="root" />
+    </bean>
+
+    <bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
+        <property name="dataSource" ref="dataSource"/>
+        <property name="mapperLocations" >
+            <list>
+                <value>classpath*:com/bob/mybatis/demos/bbtotal/mapper/*.xml</value>
+            </list>
+        </property>
+        <property name="plugins">
+            <list>
+                <bean class="com.bob.mybatis.ext.plugins.LongTimeSqlInterceptor"></bean>
+            </list>
+        </property>
+    </bean>
+
+    <bean id="transactionManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+        <property name="dataSource" ref="dataSource" />
+    </bean>
+
+    <bean id="sqlSession" class="org.mybatis.spring.SqlSessionTemplate">
+        <constructor-arg index="0" ref="sqlSessionFactory" />
+    </bean>
+
+</beans>

@@ -12,7 +12,8 @@ import org.mybatis.generator.api.dom.xml.XmlElement;
 import java.util.List;
 
 /**
- * 需要注意的是，如果同时使用了RowBoundsPlugin插件，需要把此插件写在它的前面，因为RowBoundsPlugin插件会拷呗生成一个后缀是WithRowbounds的方法，而此时from table还没改掉
+ * 需要注意的是，如果同时使用了RowBoundsPlugin插件，需要把此插件写在它的前面，
+ * 因为RowBoundsPlugin插件会拷呗生成一个后缀是WithRowbounds的方法，而此时from table还没改掉
  * 此插件只支持XMLMAPPER，因为是通过更改生成的xml节点来做到的，建议用SimpleSplitTablePlugin代替
  */
 @Deprecated
@@ -141,16 +142,14 @@ public class SplitTablePlugin extends PluginAdapterEnhancement {
     }
 
     private void resetInsertXmlElementTableName(XmlElement element) {
-        List<Element> elements = element.getElements();
-        String content = elements.get(0).getFormattedContent(0);
-        String[] data = content.split(" ");
-        data[2] = "${" + tableName + "}";
-        TextElement subSentence = new TextElement(SplitTablePlugin.join(" ", data));
-        elements.set(0, subSentence);
+        resetDIXmlElementTableName(element);
     }
 
     private void resetDeleteXmlElementTableName(XmlElement element) {
+        resetDIXmlElementTableName(element);
+    }
 
+    private void resetDIXmlElementTableName(XmlElement element) {
         List<Element> elements = element.getElements();
         String content = elements.get(0).getFormattedContent(0);
         String[] data = content.split(" ");

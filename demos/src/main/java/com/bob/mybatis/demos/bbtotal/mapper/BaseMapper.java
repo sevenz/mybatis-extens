@@ -10,10 +10,17 @@ import java.util.List;
  */
 public interface BaseMapper<T, E, PK extends Serializable> {
 
+    /**
+     * 获取总记录数
+     *
+     * @param example
+     * @return
+     */
     long countByExample(E example);
 
     /**
      * 根据查询条件进行物理删除
+     *
      * @param example
      * @return
      */
@@ -21,19 +28,23 @@ public interface BaseMapper<T, E, PK extends Serializable> {
 
     /**
      * 根据主键进行物理删除
+     *
      * @param pk
      * @return
      */
     int deleteByPrimaryKey(PK pk);
 
-    /**
-     * 逻辑删除
-     */
-    int deleteLogicByPrimaryKey(PK pk);
-
     int insert(T record);
 
     int insertSelective(T record);
+
+    /**
+     * 批量插入, 返回影响记录数
+     *
+     * @param list
+     * @return
+     */
+    int batchInsert(@Param("list") List<T> list);
 
     List<T> selectByExample(E example);
 
@@ -52,5 +63,8 @@ public interface BaseMapper<T, E, PK extends Serializable> {
 
     int updateByPrimaryKey(T record);
 
-    int batchInsert(@Param("list") List<T> list);
+    /**
+     * 业务处理时请控制下列表大小
+     */
+    int updateBatchByPrimaryKeySelective(@Param("list") List<T> list);
 }

@@ -1,0 +1,128 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE generatorConfiguration
+        PUBLIC "-//mybatis.org//DTD MyBatis Generator Configuration 1.0//EN"
+        "http://mybatis.org/dtd/mybatis-generator-config_1_0.dtd">
+
+<generatorConfiguration>
+
+    <!-- default is Mybatis3 -->
+    <context id="bbtotal" targetRuntime="com.bob.generator.extens.AddExtenMethodInXMLIntrospectedTable">
+
+        <property name="mergeable" value="false"></property>
+        <property name="javaFileEncoding" value="UTF-8"/>
+        <property name="autoDelimitKeywords" value="true"/>
+        <property name="beginningDelimiter" value="`"/>
+        <property name="endingDelimiter" value="`"/>
+
+        <plugin type="org.mybatis.generator.plugins.ToStringPlugin"/>
+        <plugin type="org.mybatis.generator.plugins.EqualsHashCodePlugin"/>
+        <plugin type="org.mybatis.generator.plugins.SerializablePlugin"/>
+        <plugin type="org.mybatis.generator.plugins.FluentBuilderMethodsPlugin"/>
+
+        <plugin type="com.bob.generator.extens.plugins.MySqlLimitPlugin"/>
+        <plugin type="com.bob.generator.extens.plugins.SelectOneByExamplePlugin">
+            <property name="methodToGenerate" value="selectOneByExample"/>
+            <property name="excludeClassNamesRegexp" value="com.*BlogMapper"/>
+        </plugin>
+
+        <!--<plugin type="com.bob.generator.extens.plugins.DeleteLogicByPrimaryKeyPlugin">-->
+        <!--<property name="methodToGenerate" value="deleteLogicByPrimaryKey"/>-->
+        <!--<property name="excludeClassNamesRegexp" value="com.*BlogMapper"/>-->
+        <!--<property name="logicDeleteColumn" value="is_delete"/>-->
+        <!--</plugin>-->
+
+        <!--用于生成 ***Entity对应的表枚举类-->
+        <plugin type="com.bob.generator.extens.plugins.ModelColumnPlugin"></plugin>
+        <plugin type="com.bob.generator.extens.plugins.BatchInsertPlugin">
+            <!--这个属性如果为ture,需要将ModelColumnPlugin插件打开,此时就不能使用CleanMapperPlugin了,因为基类没定义此方法 -->
+            <property name="shouldGeneratorBatchInsertSelective" value="false"></property>
+        </plugin>
+
+        <plugin type="com.bob.generator.extens.plugins.BatchUpdatePlugin"></plugin>
+
+        <plugin type="com.bob.generator.extens.plugins.CleanMapperPlugin">
+            <!--基类所在类的包空间-->
+            <property name="packagename" value="com.bob.mybatis.demos.bbtotal.mapper"/>
+            <!--基类名称-->
+            <property name="classname" value="BaseMapper"/>
+        </plugin>
+        <!--此插件可有可无,如果你在生成的***Mapper中添加了自定义方法,那么有此插件后不会重新生成***Mapper类,配合CleanMapperPlugin使用-->
+        <plugin type="com.bob.generator.extens.plugins.MapperPlugin">
+            <property name="targetProject"
+                      value="/Users/wangxiang/Works/code/github/mybatis-extens/demos/src/main/java"/>
+            <property name="targetPackage" value="com.bob.mybatis.demos.bbtotal.mapper"/>
+        </plugin>
+
+        <commentGenerator type="com.bob.generator.extens.DDefaultCommentGenerator">
+            <!--false打开注释，true关闭注释，跟下面相反，有点反人类-->
+            <property name="suppressAllComments" value="true"/>
+            <!-- 是否生成注释代时间戳，false为打开时间标志，true关闭 -->
+            <property name="suppressDate" value="false"/>
+            <property name="targetProject" value=""/>
+            <property name="addWDParm" value="false"/>
+        </commentGenerator>
+
+        <!-- 数据库配置 -->
+        <jdbcConnection driverClass="com.mysql.jdbc.Driver"
+                        connectionURL="jdbc:mysql://127.0.0.1:3306/hotel"
+                        userId="root"
+                        password="root">
+        </jdbcConnection>
+
+        <!--用来处理NUMBERIC跟DECIMAL类的策略-->
+        <javaTypeResolver type="com.bob.generator.extens.JavaTypeResolverCustomImpl">
+            <property name="forceBigDecimals" value="false"/>
+        </javaTypeResolver>
+
+        <!-- 生成实体类文件model配置 -->
+        <javaModelGenerator targetPackage="com.bob.mybatis.demos.bbtotal.entity"
+                            targetProject="/Users/wangxiang/Works/code/github/mybatis-extens/demos/src/main/java">
+            <property name="enableSubPackages" value="true"/>
+            <property name="trimStrings" value="true"/>
+        </javaModelGenerator>
+
+        <!-- 该配置生成 mybatis 映射文件，即Mapper.XML,只有javaClientGenerator是XMLMAPPER的时候是必须的 -->
+        <sqlMapGenerator targetPackage="com.bob.mybatis.demos.bbtotal.mapper"
+                         targetProject="/Users/wangxiang/Works/code/github/mybatis-extens/demos/src/main/resources">
+            <property name="enableSubPackages" value="true"/>
+        </sqlMapGenerator>
+
+        <!--生成 java 接口代码,即Mapper/ANNOTATEDMAPPER/XMLMAPPER -->
+        <javaClientGenerator type="XMLMAPPER"
+                             targetPackage="com.bob.mybatis.demos.bbtotal.mapper"
+                             targetProject="/Users/wangxiang/Works/code/github/mybatis-extens/demos/src/main/java">
+            <property name="enableSubPackages" value="true"/>
+        </javaClientGenerator>
+
+        <!--<javaClientGenerator type="ANNOTATEDMAPPER"-->
+        <!--targetPackage="com.bob.mybatis.demos.bbtotal.mapper"-->
+        <!--targetProject="/Users/wangxiang/Works/code/github/mybatis-extens/demos/src/main/java">-->
+        <!--<property name="enableSubPackages" value="true"/>-->
+        <!--</javaClientGenerator>-->
+
+        <!--如果需要分表，请设置enableDeleteByPrimaryKey，enableSelectByPrimaryKey为false，因为此时只有一个主键值做为入参-->
+        <table schema="hotel" tableName="T_Help_Center" domainObjectName="HelpCenterEntity"
+               enableCountByExample="true"
+               enableUpdateByExample="true"
+               enableDeleteByExample="true"
+               enableSelectByExample="true"
+               selectByPrimaryKeyQueryId="true"
+               selectByExampleQueryId="true">
+            <!-- selectByPrimaryKeyQueryId/selectByExampleQueryId 这两个属性在DBA跟踪工具中会用到 -->
+            <!-- 不使用驼峰命名 -->
+            <property name="useActualColumnNames" value="true"/>
+            <property name="logicDeleteColumn" value="deleteornot"/>
+            <property name="logicDeleteValue" value="'y'"/>
+            <property name="logicOther" value=", update_time = now()"/>
+            <generatedKey column="id" sqlStatement="MySql" identity="true"/>
+            <!--<columnOverride column="otherstatus"-->
+            <!--property="otherstatus"-->
+            <!--javaType="Integer">-->
+            <!--</columnOverride>-->
+            <!--忽略掉***这列-->
+            <ignoreColumn column="***"/>
+        </table>
+
+    </context>
+
+</generatorConfiguration>

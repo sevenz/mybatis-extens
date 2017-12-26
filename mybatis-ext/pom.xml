@@ -5,18 +5,30 @@
     <parent>
         <artifactId>bob-mybatis-extens</artifactId>
         <groupId>bob-mybatis-extens</groupId>
-        <version>0.0.1-SNAPSHOT</version>
+        <version>0.0.3</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
     <artifactId>mybatis-ext</artifactId>
 
     <dependencies>
+
         <dependency>
             <groupId>org.mybatis</groupId>
             <artifactId>mybatis</artifactId>
         </dependency>
-    </dependencies>
 
+        <dependency>
+            <groupId>com.github.jsqlparser</groupId>
+            <artifactId>jsqlparser</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-api</artifactId>
+            <scope>provided</scope>
+        </dependency>
+
+    </dependencies>
 
 </project>

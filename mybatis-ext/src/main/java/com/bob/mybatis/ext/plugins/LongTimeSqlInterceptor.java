@@ -8,14 +8,21 @@ import org.apache.ibatis.session.Configuration;
 import org.apache.ibatis.session.ResultHandler;
 import org.apache.ibatis.session.RowBounds;
 import org.apache.ibatis.type.TypeHandlerRegistry;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.text.DateFormat;
 import java.util.*;
 
+/**
+ * 打印出执行时间过长的SQL语句
+ */
 @Intercepts({
         @Signature(type = Executor.class, method = "update", args = {MappedStatement.class, Object.class}),
         @Signature(type = Executor.class, method = "query", args = {MappedStatement.class, Object.class, RowBounds.class, ResultHandler.class})})
-public class LogPlugin implements Interceptor {
+public class LongTimeSqlInterceptor implements Interceptor {
+
+    private Logger logger = LoggerFactory.getLogger(LongTimeSqlInterceptor.class);
 
     private Properties properties;
 
@@ -23,6 +30,8 @@ public class LogPlugin implements Interceptor {
     static int PARAMETER_INDEX = 1;
     static int ROWBOUNDS_INDEX = 2;
     static int RESULT_HANDLER_INDEX = 3;
+
+    static DateFormat formatter = DateFormat.getDateTimeInstance(DateFormat.DEFAULT, DateFormat.DEFAULT, Locale.CHINA);
 
     public static class BoundSqlSqlSource implements SqlSource {
         BoundSql boundSql;
@@ -40,21 +49,18 @@ public class LogPlugin implements Interceptor {
     public Object intercept(Invocation invocation) throws Throwable {
 
         MappedStatement mappedStatement = (MappedStatement) invocation.getArgs()[MAPPED_STATEMENT_INDEX];
-        Object parameter = invocation.getArgs().length > 1 ? invocation.getArgs()[PARAMETER_INDEX] : null;
-        String sqlId = mappedStatement.getId();
-        BoundSql bsql = mappedStatement.getBoundSql(parameter);
-        System.out.println(bsql.getSql().trim());
-        Configuration configuration = mappedStatement.getConfiguration();
+//        Object parameter = invocation.getArgs().length > 1 ? invocation.getArgs()[PARAMETER_INDEX] : null;
+//        BoundSql bsql = mappedStatement.getBoundSql(parameter);
+//        Configuration configuration = mappedStatement.getConfiguration();
         long start = System.currentTimeMillis();
         Object returnValue = invocation.proceed();
         long end = System.currentTimeMillis();
         long time = (end - start);
         if (time > 1) {
-            String sql = getSql(configuration, bsql, sqlId, time);
-            System.err.println(sql);
+            String sqlId = mappedStatement.getId();
+            logger.info(sqlId + " cost: " + time + " ms");
         }
         return returnValue;
-
 
         /*Object o0 = invocation.getArgs()[MAPPED_STATEMENT_INDEX];
         if (o0 instanceof MappedStatement) {
@@ -97,6 +103,7 @@ public class LogPlugin implements Interceptor {
         this.properties = properties;
     }
 
+    @SuppressWarnings("unused")
     private final String getSql(Configuration configuration, BoundSql boundSql, String sqlId, long time) {
         String sql = showSql(configuration, boundSql);
         StringBuilder str = new StringBuilder(100);
@@ -114,7 +121,6 @@ public class LogPlugin implements Interceptor {
         if (obj instanceof String) {
             value = "'" + obj.toString() + "'";
         } else if (obj instanceof Date) {
-            DateFormat formatter = DateFormat.getDateTimeInstance(DateFormat.DEFAULT, DateFormat.DEFAULT, Locale.CHINA);
             value = "'" + formatter.format(new Date()) + "'";
         } else {
             if (obj != null) {
@@ -163,22 +169,26 @@ public class LogPlugin implements Interceptor {
         builder.fetchSize(ms.getFetchSize());
         builder.statementType(ms.getStatementType());
         builder.keyGenerator(ms.getKeyGenerator());
-        // setStatementTimeout()
+        if (ms.getKeyProperties() != null && ms.getKeyProperties().length != 0) {
+            StringBuilder keyProperties = new StringBuilder();
+            for (String keyProperty : ms.getKeyProperties()) {
+                keyProperties.append(keyProperty).append(",");
+            }
+            keyProperties.delete(keyProperties.length() - 1, keyProperties.length());
+            builder.keyProperty(keyProperties.toString());
+        }
         builder.timeout(ms.getTimeout());
-        // setParameterMap()
         builder.parameterMap(ms.getParameterMap());
-        // setStatementResultMap()
         List<ResultMap> resultMaps = new ArrayList<>();
         String id = "-inline";
         if (ms.getResultMaps() != null) {
             id = ms.getResultMaps().get(0).getId() + "-inline";
         }
-        ResultMap resultMap = new ResultMap.Builder(null, id, Long.class,
+        ResultMap resultMap = new ResultMap.Builder(ms.getConfiguration(), id, Long.class,
                 new ArrayList()).build();
         resultMaps.add(resultMap);
         builder.resultMaps(resultMaps);
         builder.resultSetType(ms.getResultSetType());
-        // setStatementCache()
         builder.cache(ms.getCache());
         builder.flushCacheRequired(ms.isFlushCacheRequired());
         builder.useCache(ms.isUseCache());
