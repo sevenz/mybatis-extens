@@ -6,7 +6,7 @@ public class MapperGerneratorApp {
 
     public static void main(String[] args) {
 
-        String fileName = "/generator-mybatis-localhotel.xml";
+        String fileName = "/generator-mybatis-tk.xml";
         System.out.println(fileName);
         String path = System.class.getResource(fileName).getPath();
         System.out.println(path);

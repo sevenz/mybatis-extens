@@ -1,43 +1,42 @@
 package com.bob.mybatis.demos;
 
-import com.bob.mybatis.demos.bbtotal.entity.HelpCenterEntity;
-import com.bob.mybatis.demos.bbtotal.entity.HelpCenterEntityExample;
-import com.bob.mybatis.demos.bbtotal.mapper.HelpCenterEntityMapper;
-import org.apache.ibatis.session.*;
+import com.bob.mybatis.demos.bbtotal.entity.Stock;
+import com.bob.mybatis.demos.bbtotal.repository.StockRepository;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import org.apache.ibatis.session.SqlSession;
+import org.apache.ibatis.session.SqlSessionFactory;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 
 public class MyBatisApp {
 
-    public static void main(String[] args) {
+  public static void main(String[] args) {
 
-        MyBatisApp myBatisApp = new MyBatisApp();
-        SqlSessionFactory sqlSessionFactory = myBatisApp.sqlSessionFactory();
+    ObjectMapper objectMapper = new ObjectMapper();
 
-        try (SqlSession session = sqlSessionFactory.openSession(true)) {
-            HelpCenterEntityMapper helpCenterEntityMapper = session.getMapper(HelpCenterEntityMapper.class);
 
-            HelpCenterEntity helpCenterEntity = new HelpCenterEntity();
-            helpCenterEntity.setAnswer("A");
-            helpCenterEntity.setQuestion("d");
-            helpCenterEntity.setOtherstatus(1);
-            helpCenterEntity.setIsdelete(true);
-            helpCenterEntityMapper.insertSelective(helpCenterEntity);
+    MyBatisApp myBatisApp = new MyBatisApp();
+    ApplicationContext applicationContext = myBatisApp.applicationContext();
+    StockRepository stockRepository = applicationContext.getBean(StockRepository.class);
+    Stock stock = new Stock();
+    stock.setDate("adadfa");
+    stock.setId(1122l);
+    stock.setLdtime(111111l);
+    stock.setTime("1");
+    Integer i = stockRepository.insert(stock);
+    System.out.println(i.toString());
 
-            HelpCenterEntityExample entityExample = new HelpCenterEntityExample();
-            entityExample.createCriteria().andIdEqualTo(helpCenterEntity.getId() + 3);
-            helpCenterEntity = helpCenterEntityMapper.selectOneByExample(entityExample);
-            if (helpCenterEntity != null) {
-                System.out.println(helpCenterEntity);
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+    SqlSessionFactory sqlSessionFactory = myBatisApp.sqlSessionFactory();
+    try (SqlSession session = sqlSessionFactory.openSession(true)) {
 
-        System.exit(0);
+    } catch (Exception e) {
+      e.printStackTrace();
     }
 
-    private SqlSessionFactory sqlSessionFactory() {
+    System.exit(0);
+  }
+
+  private SqlSessionFactory sqlSessionFactory() {
 
 //        HikariDataSource dataSource = new HikariDataSource();
 //        dataSource.setUsername("root");
@@ -53,7 +52,6 @@ public class MyBatisApp {
 //        configuration.setLogPrefix("dao.");
 //        return new SqlSessionFactoryBuilder().build(configuration);
 
-
 //        String resource = "mybatis-config.xml";
 //        InputStream inputStream = null;
 //        try {
@@ -65,9 +63,15 @@ public class MyBatisApp {
 //        SqlSessionFactory factory = builder.build(inputStream);
 //        return factory;
 
+    ApplicationContext application = applicationContext();
+    return application.getBean(SqlSessionFactory.class);
+  }
 
-        ApplicationContext application = new
-                ClassPathXmlApplicationContext("classpath:spring-beans.xml");
-        return application.getBean(SqlSessionFactory.class);
-    }
+  private ApplicationContext applicationContext() {
+
+    ApplicationContext application = new
+        ClassPathXmlApplicationContext("classpath:spring-beans.xml");
+
+    return application;
+  }
 }

@@ -8,7 +8,7 @@ import java.util.List;
 /**
  * Created by wangxiang on 17/6/28.
  */
-public interface BaseMapper<T, E, PK extends Serializable> {
+public interface AbstractMapper<T, E, PK extends Serializable> {
 
     /**
      * 获取总记录数
