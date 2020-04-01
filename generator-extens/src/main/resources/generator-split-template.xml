@@ -22,9 +22,9 @@
 
         <!-- 数据库配置 -->
         <jdbcConnection driverClass="com.mysql.jdbc.Driver"
-                        connectionURL="jdbc:mysql://192.168.2.223:3306/bailingdai"
+                        connectionURL="jdbc:mysql://xxxx:3306/xxxx"
                         userId="root"
-                        password="zufangbao">
+                        password="xxx">
         </jdbcConnection>
 
         <!--用来处理NUMBERIC跟DECIMAL类的策略-->
